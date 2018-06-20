@@ -40,7 +40,6 @@ export class ChoresScreen extends React.Component {
   }
 
   getChores() {
-    console.log(this.name);
     fetch(`http://lounge621app.qu2kndcevx.us-west-2.elasticbeanstalk.com/myChores?name=${this.name}`)
       .then(response => response.json())
       .then((json) => {
@@ -51,11 +50,11 @@ export class ChoresScreen extends React.Component {
       });
   }
 
-  deleteChore(id) {
-    const newChores = this.state.chores.filter(ele => ele._id !== id);
-    this.setState({
-      chores: newChores
-    });
+  finishChore(id) {
+    this.setState(prev => ({
+      inChores: prev.inChores.filter(ele => ele._id !== id),
+      doneChores: prev.inChores.filter(ele => ele._id === id).concat(prev.doneChores)
+    }));
   }
 
   render() {
@@ -63,33 +62,21 @@ export class ChoresScreen extends React.Component {
       <ScrollView>
         <Text>{this.state.inChores.length} chores</Text>
         <Text> Chores List </Text>
-          {
-            this.state.inChores.map((chore, index) =>
-              <ChoreView key={index} chore={chore} deleteMe={this.deleteChore.bind(this)}></ChoreView>)
-          }
+        <InChores chores={this.state.inChores} finishChore={this.finishChore.bind(this)}></InChores>
         <Text> Completed Chores </Text>
-          {
-            this.state.inChores.map((chore, index) =>
-              <ChoreView key={index} chore={chore} deleteMe={this.deleteChore.bind(this)}></ChoreView>)
-          }
+        <DoneChores chores={this.state.doneChores}></DoneChores>
       </ScrollView>
     );
   }
 }
 
 
-class ChoreView extends React.Component {
-  constructor(props) {
-    super(props);
-    this.chore = this.props.chore;
-    console.log(this.chore);
-  }
-
-  finishJob() {
-    fetch(`http://lounge621app.qu2kndcevx.us-west-2.elasticbeanstalk.com/doneChore?choreId=${this.chore._id}`)
+class InChores extends React.Component {
+  finishJob(id) {
+    fetch(`http://lounge621app.qu2kndcevx.us-west-2.elasticbeanstalk.com/doneChore?choreId=${id}`)
       .then(response => response.text())
       .then(() => {
-        this.props.deleteMe(this.chore._id);
+        this.props.finishChore(id);
         // put a banner that says chore was deleted successfully
       })
       .catch(err => console.log(`ERROR: ${err}`));
@@ -98,13 +85,44 @@ class ChoreView extends React.Component {
   render() {
     return (
         <View style={styles.choresView}>
-            <Text style={styles.choresName}>{this.chore.name}</Text>
-            <Button
-              onPress={this.finishJob.bind(this)}
-              title="I'm Done!"
-              color="#841584"
-              accessibilityLabel="Learn more about this purple button"
-            />
+          {
+            this.props.chores.map((ele, index) => (
+              <View key={index}> 
+                <Text style={styles.choresName}>{ele.name}</Text>
+                <Button
+                  onPress={this.finishJob.bind(this,ele._id)}
+                  title="I'm Done!"
+                  color="#841584"
+                />
+              </View>
+            ))
+          }
+        </View>
+    );
+  }
+}
+
+class DoneChores extends React.Component {
+  finishJob(id) {
+    // fetch(`http://lounge621app.qu2kndcevx.us-west-2.elasticbeanstalk.com/doneChore?choreId=${id}`)
+    //   .then(response => response.text())
+    //   .then(() => {
+    //     this.props.deleteMe(id);
+    //     // put a banner that says chore was deleted successfully
+    //   })
+    //   .catch(err => console.log(`ERROR: ${err}`));
+  }
+
+  render() {
+    return (
+        <View style={styles.choresView}>
+            {
+              this.props.chores.map((ele, index) => (
+                <View key={index}> 
+                  <Text style={styles.choresName}>{ele.name}</Text>
+                </View>
+              ))
+            }
         </View>
     );
   }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, TextInput, Button, AsyncStorage } from 'react-native';
+import { baseURL } from '../config';
 
 
 export class getUsersPhrase extends React.Component {
@@ -29,14 +30,22 @@ export class getUsersPhrase extends React.Component {
   }
 
   isCorrectPhrase() {
-    if (this.state.text === this.state.hash) {
-      try {
-        AsyncStorage.setItem('@lounge621:phrase', this.state.hash);
-      } catch (err) {
-        console.log('bad');
-      }
-      this.props.navigation.navigate('Home', { name: this.state.name });
-    }
+    fetch(`${baseURL}/login?user=${this.state.name}&password=${this.state.text}`)
+      .then(x => x.text())
+      .then(x => {
+        if ( x == "Success" ) {
+          try {
+            AsyncStorage.setItem('@lounge621:phrase', this.state.text);
+            AsyncStorage.setItem('@lounge621:user', this.state.name);
+          } catch (err) {
+            console.log(err);
+          }
+          this.props.navigation.navigate('Home', { name: this.state.name });
+        } else {
+          console.log("Inncorrect password");
+        }
+      })
+      .catch(err => console.log("ERROR" + err))
   }
 
   render() {

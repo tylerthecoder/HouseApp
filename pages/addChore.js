@@ -1,10 +1,11 @@
 import React from 'react';
 import { Text, View, TextInput, Button } from 'react-native';
+import { baseURL } from '../config';
 
 
 export class AddChoreScreen extends React.Component {
   submitChore() {
-    fetch(`http://lounge621app.qu2kndcevx.us-west-2.elasticbeanstalk.com/postChore?chore=${this.state.text}`)
+    fetch(`${baseURL}/postChore?chore=${this.state.text}`)
       .then((response) => {
         console.log(response);
         return response.text();

@@ -1,5 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TouchableHighlight, AsyncStorage } from 'react-native';
+import { baseURL } from '../config';
+
+console.log(baseURL);
 
 const styles = StyleSheet.create({
   container: {
@@ -57,16 +60,38 @@ export class StartScreen extends React.Component {
         fontSize: 30,
       }
     });
+
+    let name;
+    Promise.all([AsyncStorage.getItem('@lounge621:user'),AsyncStorage.getItem('@lounge621:phrase')])
+      .then(([user,pass]) => {
+        name = user
+        if (user !== null && pass !== null) {
+          return fetch(`${baseURL}/login?user=${user}&password=${pass}`);
+        } else {
+          throw 'No data saved';
+        }
+      })
+      .then(x => x.text())
+      .then(x => {
+        if ( x == "Success" ) {
+          this.props.navigation.navigate('Home', { name })
+        }
+      })
+      .catch((err) => {
+        console.log("Error: ", err);
+      })
+
   }
 
   getFriendData() {
-    fetch('http://lounge621app.qu2kndcevx.us-west-2.elasticbeanstalk.com/getFriendData')
+    fetch(`${baseURL}/getFriendData`)
       .then(response => response.json())
       .then((responseJson) => {
         this.setState({
           friendData: responseJson
         });
-      });
+      })
+      .catch(err => console.log(err));
   }
 
   getFriendStyle(color) {

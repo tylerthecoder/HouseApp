@@ -1,11 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, TouchableHighlight } from 'react-native';
 import ActionButton from 'react-native-action-button';
+import { baseURL } from '../config';
 
 
 export class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
+    console.log(this.props.navigation.getParam('name'));
     this.state = {
       name: this.props.navigation.getParam('name'),
     };
@@ -51,16 +53,16 @@ class Chores extends React.Component {
       }
     });
 
-    fetch(`http://lounge621app.qu2kndcevx.us-west-2.elasticbeanstalk.com/myChores?name=${this.props.name}`)
+    fetch(`${baseURL}/myChores?name=${this.props.name}`)
       .then(response => response.json())
       .then((json) => {
         this.setState({ chores: json });
       });
 
-    fetch(`http://lounge621app.qu2kndcevx.us-west-2.elasticbeanstalk.com/myPoints?name=${this.props.name}`)
+    fetch(`${baseURL}/myPoints?name=${this.props.name}`)
       .then(response => response.text())
       .then((text) => {
-        alert(text);
+        console.log(points);
       });
   }
 
