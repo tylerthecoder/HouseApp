@@ -41,7 +41,7 @@ class Chores extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      chores: [{ name: '' }]
+      points: 0
     };
     this.style = StyleSheet.create({
       card: {
@@ -53,17 +53,14 @@ class Chores extends React.Component {
       }
     });
 
-    fetch(`${baseURL}/myChores?name=${this.props.name}`)
-      .then(response => response.json())
-      .then((json) => {
-        this.setState({ chores: json });
-      });
-
     fetch(`${baseURL}/myPoints?name=${this.props.name}`)
       .then(response => response.text())
-      .then((text) => {
-        console.log(points);
-      });
+      .then((points) => {
+        this.setState({
+          points
+        })
+      })
+      .catch(err => console.log(err))
   }
 
   onclick() {
@@ -74,7 +71,7 @@ class Chores extends React.Component {
   render() {
     return (
       <TouchableHighlight onPress={this.onclick.bind(this)} style={this.style.card}>
-        <Text> Your Chore is {JSON.stringify(this.state.chores[0].name)}</Text>
+        <Text> You have {this.state.points} points</Text>
       </TouchableHighlight>
     );
   }

@@ -12,7 +12,6 @@ export class AddChoreScreen extends React.Component {
       })
       .then((response) => {
         console.log(response);
-        alert('Chore uploaded');
       })
       .catch(err => console.log(`ERROR: ${err}`));
   }
