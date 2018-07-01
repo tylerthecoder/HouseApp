@@ -5,7 +5,7 @@ import gql from "graphql-tag";
 import { ApolloProvider, Mutation } from "react-apollo";
 
 const ADD_CHORE = gql`
-  mutation addChore($name: String!, $points: Number!, $friend: String!) {
+  mutation addChore($name: String!, $points: Int!, $friend: String!) {
     addChore(name: $name, points: $points, friend_id: $friend) {
       chore_id
       doer {
