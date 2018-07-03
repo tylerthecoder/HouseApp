@@ -1,88 +1,90 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, AsyncStorage } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { ApolloProvider } from 'react-apollo';
 import { PasswordInput } from './pass';
-import { baseURL, client } from '../../config';
+import { client } from '../../config';
 import { FriendsList } from './friends';
 import { AutoLogin } from './autologin';
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  topText: {
+    fontSize: 100,
+  },
+  headingText: {
+    fontSize: 100,
+  },
+  halfContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
+
+
 export class StartScreen extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor({ navigation }) {
+    super();
     this.state = {
-      friendData: [],
       showModal: false,
-      selectedName:''
+      selectedFriend: '',
     };
+
     AutoLogin()
-      .then(friend => {
-        this.props.navigation.navigate('Home', { friend })
+      .then((friend) => {
+        navigation.navigate('Home', { friend });
       })
-      .catch(err => console.log(err))
-    this.style = StyleSheet.create({
-      container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center'
-      },
-      topText: {
-        fontSize: 100,
-      },
-      headingText: {
-        fontSize: 100,
-      },
-      halfContainer: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: Dimensions.get('window').height / 2
-      }
-    });
+      .catch(err => console.log(err));
   }
 
   openPasswordModal(friend) {
-    this.setState(prev => ({
-      friendData: prev.friendData,
+    this.setState({
       showModal: true,
-      selectedFriend:friend,
-    }))
+      selectedFriend: friend,
+    });
   }
 
   closeModal() {
-    this.setState(prev => ({
-        friendData: prev.friendData,
-        showModal: false,
-        selectedName: ''
-    }))
+    this.setState({
+      showModal: false,
+      selectedFriend: '',
+    });
   }
 
   render() {
-    const upperHalf = (this.state.showModal) ? (
+    const { showModal, selectedFriend } = this.state;
+    const { navigation } = this.props;
+
+    const upperHalf = (showModal) ? (
       <PasswordInput
-        friend={this.state.selectedFriend}
-        navigation={this.props.navigation}
-        closeModal={this.closeModal.bind(this)}
+        friend={selectedFriend}
+        navigation={navigation}
+        closeModal={() => this.closeModal()}
       />
-    ):(
-      <View style={this.style.container}>
-        <Text style={this.style.topText}> Lounge </Text>
-        <Text style={this.style.headingText}> 621 </Text>
+    ) : (
+      <View style={styles.container}>
+        <Text style={styles.topText}> Lounge </Text>
+        <Text style={styles.headingText}> 621 </Text>
       </View>
-    )
+    );
 
     return (
       <ApolloProvider client={client}>
-        <View style={this.style.container}>
-            <View style={this.style.halfContainer}>
-                {upperHalf}
-            </View>
-            <View style={this.style.halfContainer}>
-                <FriendsList
-                  promptPassword={this.openPasswordModal.bind(this)}
-                />
-            </View>
+        <View style={styles.container}>
+          <View style={styles.halfContainer}>
+            {upperHalf}
+          </View>
+          <View style={styles.halfContainer}>
+            <FriendsList
+              promptPassword={this.openPasswordModal.bind(this)}
+            />
+          </View>
         </View>
       </ApolloProvider>
     );
