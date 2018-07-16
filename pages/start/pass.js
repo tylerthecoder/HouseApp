@@ -6,22 +6,24 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
     alignItems: 'center',
+    width: Dimensions.get('window').width,
+    padding: 10,
   },
   phraseInput: {
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
     paddingLeft: 5,
-    width: Dimensions.get('window').width * 0.9,
+    alignSelf: 'stretch',
   },
   button: {
-    width: Dimensions.get('window').width * 0.9,
     backgroundColor: 'lightblue',
     alignItems: 'center',
     marginTop: 5,
     borderColor: 'black',
     borderWidth: 1,
     padding: 5,
+    alignSelf: 'stretch',
   },
   buttonText: {
     color: 'white',
@@ -49,12 +51,12 @@ export class PasswordInput extends React.Component {
             AsyncStorage.setItem('@lounge621:phrase', text);
             AsyncStorage.setItem('@lounge621:user', friend.friend_id);
           } catch (err) {
-            console.log(err);
+            throw err;
           }
           closeModal();
           navigation.navigate('Home', { friend });
         } else {
-          console.log('Inncorrect password');
+          throw new Error('Inncorrect password');
         }
       })
       .catch(err => console.log(`ERROR ${err}`));

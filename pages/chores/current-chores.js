@@ -3,28 +3,16 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
 } from 'react-native';
-import { Mutation } from 'react-apollo';
-import {
-  choreQuery,
-  COMPLETE_CHORE,
-} from '../../queries';
+import { Chore } from './chore-componet';
 
 
 const styles = StyleSheet.create({
   choresView: {
   },
-  choreName: {
-    fontSize: 16,
+  header: {
     textAlign: 'center',
-  },
-  chore: {
-    backgroundColor: 'white',
-    borderColor: 'black',
-    borderWidth: 3,
-    marginBottom: 5,
-    padding: 5,
+    fontSize: 20,
   },
 });
 
@@ -34,61 +22,42 @@ export class CurrentChores extends React.Component {
     super();
     this.state = {
       chores: chores.filter(chore => chore.status === 'assigned'),
+      show: true,
     };
   }
 
-  finishChore(query, choreId) {
-    const { friend } = this.props;
-    query({
-      variables: { chore_id: choreId },
-      update: (store, { data: { changeStatus } }) => {
-        try {
-          const data = store.readQuery({
-            query: choreQuery,
-            variables: { friend_id: friend.friend_id },
-          });
-          data.chores.forEach((chore) => {
-            if (chore.chore_id === changeStatus.chore_id) chore.status = 'completed';
-          });
+  finishChore(choreId) {
+    this.setState(prev => ({
+      chores: prev.chores.filter(chore => choreId !== chore.id),
+      show: prev.show,
+    }));
+  }
 
-          store.writeQuery({
-            data,
-            query: choreQuery,
-            variables: { friend_id: friend.friend_id },
-          });
-
-          this.setState(prev => ({
-            chores: prev.chores.filter(chore => changeStatus.chore_id !== chore.chore_id),
-          }));
-        } catch (err) {
-          console.log(err);
-        }
-      },
-    });
+  toggle() {
+    this.setState(prev => ({
+      chores: prev.chores,
+      show: !prev.show,
+    }));
   }
 
   render() {
-    const { chores } = this.state;
+    const { chores, show } = this.state;
+    const { friend } = this.props;
     return (
       <View style={styles.choresView}>
-        <Text> Chores List </Text>
-        {
-          chores.map(chore => (
-            <Mutation mutation={COMPLETE_CHORE} key={chore.chore_id}>
-              {changeStatus => (
-                <View style={styles.chore}>
-                  <Text style={styles.choreName}>{chore.name} ({chore.points} Points)</Text>
-                  <Button
-                    title='Done!'
-                    color='#841584'
-                    onPress={() => this.finishChore(changeStatus, chore.chore_id)}
-                  />
-                </View>
-              )}
-            </Mutation>
-          ))
-          }
+        <Text style={styles.header} onPress={() => this.toggle()}> Your Chores {show ? '▲' : '▼'}</Text>
+        { show && chores.map(chore => (
+          <Chore
+            chore={chore}
+            key={chore.id}
+            friend={friend}
+            updateParent={choreId => this.finishChore(choreId)}
+          />
+        ))
+        }
       </View>
     );
   }
 }
+
+
