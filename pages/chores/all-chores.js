@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export class DoneChores extends React.Component {
+export class AllChores extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -33,12 +33,12 @@ export class DoneChores extends React.Component {
   render() {
     const { chores, friend } = this.props;
     const { show } = this.state;
-    const completedChores = chores.filter(chore => chore.status === 'completed');
+    const notMyChores = chores.filter(chore => chore.doer.friend_id !== friend.friend_id);
     return (
       <View style={styles.choresView}>
-        <Text style={styles.header} onPress={() => this.toggle()}> Completed Chores {show ? '▲' : '▼'}</Text>
+        <Text style={styles.header} onPress={() => this.toggle()}> All Chores {show ? '▲' : '▼'}</Text>
         {
-          show && completedChores.map(chore => (
+          show && notMyChores.map(chore => (
             <Chore
               key={chore.id}
               chore={chore}

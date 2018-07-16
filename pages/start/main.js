@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    alignSelf: 'stretch',
   },
   topText: {
     fontSize: 100,
@@ -66,6 +67,7 @@ export class StartScreen extends React.Component {
         friend={selectedFriend}
         navigation={navigation}
         closeModal={() => this.closeModal()}
+        style={styles.container}
       />
     ) : (
       <View style={styles.container}>

@@ -1,5 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, Dimensions, TouchableHighlight } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  Dimensions,
+  TouchableHighlight,
+} from 'react-native';
 import { Query } from 'react-apollo';
 import { GET_FRIENDS } from '../../queries';
 
@@ -42,10 +47,10 @@ export class FriendsList extends React.Component {
               >
                 <Text style={styles.personNameText}> {friend.name} </Text>
               </TouchableHighlight>
-            )
+            );
           });
         }}
       </Query>
-    )
+    );
   }
-};
+}
