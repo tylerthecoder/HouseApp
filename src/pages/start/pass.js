@@ -43,7 +43,8 @@ export class PasswordInput extends React.Component {
   isCorrectPhrase() {
     const { friend, closeModal, navigation } = this.props;
     const { text } = this.state;
-    fetch(`${baseURL}/login?friend_id=${friend.friend_id}&password=${text}`)
+    console.log(friend.friend_id, text);
+    fetch(`${baseURL}/login?whoami=${friend.friend_id}&pass=${text}`)
       .then(x => x.text())
       .then((x) => {
         if (x === 'Success') {
