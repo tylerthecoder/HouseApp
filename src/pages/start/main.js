@@ -1,8 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { ApolloProvider } from 'react-apollo';
 import { PasswordInput } from './pass';
-import { client } from '../../config';
 import { FriendsList } from './friends';
 import { AutoLogin } from './autologin';
 
@@ -77,18 +75,16 @@ export class StartScreen extends React.Component {
     );
 
     return (
-      <ApolloProvider client={client}>
-        <View style={styles.container}>
-          <View style={styles.halfContainer}>
-            {upperHalf}
-          </View>
-          <View style={styles.halfContainer}>
-            <FriendsList
-              promptPassword={this.openPasswordModal.bind(this)}
-            />
-          </View>
+      <View style={styles.container}>
+        <View style={styles.halfContainer}>
+          {upperHalf}
         </View>
-      </ApolloProvider>
+        <View style={styles.halfContainer}>
+          <FriendsList
+            promptPassword={this.openPasswordModal.bind(this)}
+          />
+        </View>
+      </View>
     );
   }
 }

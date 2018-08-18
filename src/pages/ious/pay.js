@@ -5,8 +5,7 @@ import {
   Picker,
   StyleSheet,
 } from 'react-native';
-import { ApolloProvider, Mutation } from 'react-apollo';
-import { client } from '../../config';
+import { Mutation } from 'react-apollo';
 import { ADD_IOU, GET_MY_IOUS } from '../../queries';
 import { FriendPicker } from '../../components/friendPicker';
 import { NumberInput } from '../../components/numberInput';
@@ -69,63 +68,61 @@ export class PayScreen extends React.Component {
     const { navigation } = this.props;
     const friend = navigation.getParam('friend');
     return (
-      <ApolloProvider client={client}>
-        <View>
-          <Text style={styles.headerText}> Enter Transaction </Text>
-          <FriendPicker
-            exclude={[friend.friend_id]}
-            onChange={(fri) => {
-              this.setState(prev => ({
-                payWho: fri,
-                direction: prev.direction,
-                amount: prev.amount,
-              }));
-            }}
+      <View>
+        <Text style={styles.headerText}> Enter Transaction </Text>
+        <FriendPicker
+          exclude={[friend.friend_id]}
+          onChange={(fri) => {
+            this.setState(prev => ({
+              payWho: fri,
+              direction: prev.direction,
+              amount: prev.amount,
+            }));
+          }}
+        />
+        <Picker
+          selectedValue={direction}
+          onValueChange={(dir) => {
+            this.setState(prev => ({
+              payWho: prev.payWho,
+              direction: dir,
+              amount: prev.amount,
+            }));
+          }}
+        >
+          <Picker.Item
+            key={0}
+            label='Paid you'
+            value='out'
           />
-          <Picker
-            selectedValue={direction}
-            onValueChange={(dir) => {
-              this.setState(prev => ({
-                payWho: prev.payWho,
-                direction: dir,
-                amount: prev.amount,
-              }));
-            }}
-          >
-            <Picker.Item
-              key={0}
-              label='Paid you'
-              value='out'
-            />
-            <Picker.Item
-              key={0}
-              label='Needs to pay you'
-              value='in'
-            />
-          </Picker>
-          <NumberInput
-            placeholder='How much?'
-            onChange={(amt) => {
-              this.setState(prev => ({
-                amount: amt,
-                payWho: prev.payWho,
-                direction: prev.direction,
-              }));
-            }}
+          <Picker.Item
+            key={0}
+            label='Needs to pay you'
+            value='in'
           />
-          <Mutation mutation={ADD_IOU}>
-            {addIou => (
-              <BlockButton
-                onPress={() => {
-                  this.onSubmit(addIou);
-                }}
-              >
-                <Text style={styles.centerText}> Submit Transaction </Text>
-              </BlockButton>
-            )}
-          </Mutation>
-        </View>
-      </ApolloProvider>
+        </Picker>
+        <NumberInput
+          placeholder='How much?'
+          onChange={(amt) => {
+            this.setState(prev => ({
+              amount: amt,
+              payWho: prev.payWho,
+              direction: prev.direction,
+            }));
+          }}
+        />
+        <Mutation mutation={ADD_IOU}>
+          {addIou => (
+            <BlockButton
+              onPress={() => {
+                this.onSubmit(addIou);
+              }}
+            >
+              <Text style={styles.centerText}> Submit Transaction </Text>
+            </BlockButton>
+          )}
+        </Mutation>
+      </View>
     );
   }
 }

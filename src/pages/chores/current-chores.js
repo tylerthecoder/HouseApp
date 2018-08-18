@@ -59,5 +59,3 @@ export class CurrentChores extends React.Component {
     );
   }
 }
-
-

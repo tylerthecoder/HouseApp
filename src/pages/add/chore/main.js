@@ -4,8 +4,6 @@ import {
   Text,
   StyleSheet,
 } from 'react-native';
-import { ApolloProvider } from 'react-apollo';
-import { client } from '../../../config';
 import { AddBaseChore } from './base-chore';
 import { AddPrestChore } from './preset-chore';
 
@@ -37,19 +35,17 @@ export class AddChoreScreen extends React.Component {
     const { navigation } = this.props;
     const friend = navigation.getParam('friend');
     return (
-      <ApolloProvider client={client}>
-        <View style={styles.container}>
-          <AddPrestChore
-            friend={friend}
-          />
-          <View style={styles.divider}>
-            <Text style={styles.dividerText}> Or... </Text>
-          </View>
-          <AddBaseChore
-            friend={friend}
-          />
+      <View style={styles.container}>
+        <AddPrestChore
+          friend={friend}
+        />
+        <View style={styles.divider}>
+          <Text style={styles.dividerText}> Or... </Text>
         </View>
-      </ApolloProvider>
+        <AddBaseChore
+          friend={friend}
+        />
+      </View>
     );
   }
 }

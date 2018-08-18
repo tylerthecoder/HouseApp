@@ -6,8 +6,7 @@ import {
   TextInput,
   StyleSheet,
 } from 'react-native';
-import { ApolloProvider, Mutation } from 'react-apollo';
-import { client } from '../../../config';
+import { Mutation } from 'react-apollo';
 import { ADD_BASE_CHORE, GET_ALL_BASE_CHORES } from '../../../queries';
 
 const styles = StyleSheet.create({
@@ -61,29 +60,27 @@ export class AddBaseChore extends React.Component {
   render() {
     const { name, points } = this.state;
     return (
-      <ApolloProvider client={client}>
-        <Mutation mutation={ADD_BASE_CHORE}>
-          {addBaseChore => (
-            <View style={styles.container}>
-              <Text style={styles.headerText}> Add new preset chore </Text>
-              <TextInput
-                value={name}
-                onChangeText={n => this.setState({ name: n })}
-                placeholder='Enter name of chore'
-              />
-              <TextInput
-                value={points.toString()}
-                onChangeText={p => this.validatePoint(p)}
-                placeholder='Enter point value of new chore'
-              />
-              <Button
-                title='Add'
-                onPress={() => this.addBaseChore(addBaseChore)}
-              />
-            </View>
-          )}
-        </Mutation>
-      </ApolloProvider>
+      <Mutation mutation={ADD_BASE_CHORE}>
+        {addBaseChore => (
+          <View style={styles.container}>
+            <Text style={styles.headerText}> Add new preset chore </Text>
+            <TextInput
+              value={name}
+              onChangeText={n => this.setState({ name: n })}
+              placeholder='Enter name of chore'
+            />
+            <TextInput
+              value={points.toString()}
+              onChangeText={p => this.validatePoint(p)}
+              placeholder='Enter point value of new chore'
+            />
+            <Button
+              title='Add'
+              onPress={() => this.addBaseChore(addBaseChore)}
+            />
+          </View>
+        )}
+      </Mutation>
     );
   }
 }

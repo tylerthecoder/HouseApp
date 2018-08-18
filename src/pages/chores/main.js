@@ -1,9 +1,13 @@
 import React from 'react';
-import { Text, ScrollView, StyleSheet, View } from 'react-native';
-import { ApolloProvider, Query } from 'react-apollo';
+import {
+  Text,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
+import { Query } from 'react-apollo';
 import { CurrentChores } from './current-chores';
 import { DoneChores } from './done-chores';
-import { client } from '../../config';
 import {
   ALL_CHORES,
 } from '../../queries';
@@ -19,39 +23,37 @@ export class ChoresScreen extends React.Component {
     const { navigation } = this.props;
     const friend = navigation.getParam('friend');
     return (
-      <ApolloProvider client={client}>
-        <Query
-          query={ALL_CHORES}
-          variables={{ friend_id: friend.friend_id }}
-          skip={!ALL_CHORES}
-        >
-          {
-            ({ loading, error, data }) => {
-              if (loading) return <Text> Loading... </Text>;
-              if (error) return <Text> {JSON.stringify(error)} </Text>;
-              const { chores } = data;
-              return (
-                <View style={styles.container}>
-                  <ScrollView>
-                    <CurrentChores
-                      chores={chores.filter(chore => chore.doer.friend_id === friend.friend_id)}
-                      friend={friend}
-                    />
-                    <DoneChores
-                      chores={chores.filter(chore => chore.doer.friend_id === friend.friend_id)}
-                      friend={friend}
-                    />
-                    <AllChores
-                      chores={chores}
-                      friend={friend}
-                    />
-                  </ScrollView>
-                </View>
-              );
-            }
+      <Query
+        query={ALL_CHORES}
+        variables={{ friend_id: friend.friend_id }}
+        skip={!ALL_CHORES}
+      >
+        {
+          ({ loading, error, data }) => {
+            if (loading) return <Text> Loading... </Text>;
+            if (error) return <Text> {JSON.stringify(error)} </Text>;
+            const { chores } = data;
+            return (
+              <View style={styles.container}>
+                <ScrollView>
+                  <CurrentChores
+                    chores={chores.filter(chore => chore.doer.friend_id === friend.friend_id)}
+                    friend={friend}
+                  />
+                  <DoneChores
+                    chores={chores.filter(chore => chore.doer.friend_id === friend.friend_id)}
+                    friend={friend}
+                  />
+                  <AllChores
+                    chores={chores}
+                    friend={friend}
+                  />
+                </ScrollView>
+              </View>
+            );
           }
-        </Query>
-      </ApolloProvider>
+        }
+      </Query>
     );
   }
 }

@@ -31,7 +31,7 @@ export class NumberInput extends React.Component {
           value={String(number)}
           style={styles.input}
           onChangeText={(rawAmount) => {
-            const num = rawAmount.length === 0 ? 0 : parseInt(rawAmount, 10);
+            const num = rawAmount.length === 0 ? 0 : parseFloat(rawAmount, 10);
             this.setState({
               number: num,
             });

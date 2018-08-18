@@ -1,4 +1,4 @@
-import React from '../../../../../Library/Caches/typescript/2.9/node_modules/@types/react';
+import React from 'react';
 import {
   Text,
   View,
@@ -6,8 +6,7 @@ import {
   StyleSheet,
   Picker,
 } from 'react-native';
-import { ApolloProvider, Mutation, Query } from 'react-apollo';
-import { client } from '../../config';
+import { Mutation, Query } from 'react-apollo';
 import { ADD_CHORE, GET_ALL_BASE_CHORES, ALL_CHORES } from '../../queries';
 import { AddBaseChore } from './chore/base-chore';
 
@@ -64,51 +63,49 @@ export class AddChoreScreen extends React.Component {
   render() {
     const { selectChore } = this.state;
     return (
-      <ApolloProvider client={client}>
-        <Mutation mutation={ADD_CHORE}>
-          {addChore => (
-            <Query query={GET_ALL_BASE_CHORES}>
-              {
-                (({ loading, error, data }) => {
-                  if (loading) return (<Text> Loading </Text>);
-                  if (error) return (<Text> {error.message} </Text>);
-                  this.baseChores = data.baseChores;
-                  return (
-                    <View style={styles.container}>
-                      <View>
-                        <Text style={styles.descText}> Pick a preset chore, create a new chore, or post a custom chore</Text>
-                        <Picker
-                          selectedValue={selectChore}
-                          style={styles.pickerStyle}
-                          onValueChange={chore => this.setState({ selectChore: chore })}
-                        >
-                          {
-                            data.baseChores.map(chore => (
-                              <Picker.Item
-                                key={chore.id}
-                                label={`${chore.name} (${chore.points})`}
-                                value={chore.id}
-                              />
-                            ))
-                          }
-                        </Picker>
-                      </View>
-                      <Button
-                        title='Submit Chore'
-                        onPress={() => this.submitChore(addChore)}
-                      />
-                      <AddBaseChore
-                        friend={this.friend}
-                      />
+      <Mutation mutation={ADD_CHORE}>
+        {addChore => (
+          <Query query={GET_ALL_BASE_CHORES}>
+            {
+              (({ loading, error, data }) => {
+                if (loading) return (<Text> Loading </Text>);
+                if (error) return (<Text> {error.message} </Text>);
+                this.baseChores = data.baseChores;
+                return (
+                  <View style={styles.container}>
+                    <View>
+                      <Text style={styles.descText}> Pick a preset chore, create a new chore, or post a custom chore</Text>
+                      <Picker
+                        selectedValue={selectChore}
+                        style={styles.pickerStyle}
+                        onValueChange={chore => this.setState({ selectChore: chore })}
+                      >
+                        {
+                          data.baseChores.map(chore => (
+                            <Picker.Item
+                              key={chore.id}
+                              label={`${chore.name} (${chore.points})`}
+                              value={chore.id}
+                            />
+                          ))
+                        }
+                      </Picker>
                     </View>
-                  );
-                })
-              }
+                    <Button
+                      title='Submit Chore'
+                      onPress={() => this.submitChore(addChore)}
+                    />
+                    <AddBaseChore
+                      friend={this.friend}
+                    />
+                  </View>
+                );
+              })
+            }
 
-            </Query>
-          )}
-        </Mutation>
-      </ApolloProvider>
+          </Query>
+        )}
+      </Mutation>
     );
   }
 }
