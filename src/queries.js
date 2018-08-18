@@ -61,7 +61,7 @@ export const GET_ALL_BASE_CHORES = gql`
       points
     }
   }
-`
+`;
 
 export const GET_FRIEND_CHORES = gql`
   query chores($friend_id: String!) {
@@ -69,6 +69,19 @@ export const GET_FRIEND_CHORES = gql`
       points
       chores {
         name
+      }
+    }
+  }
+`;
+
+export const GET_MY_IOUS = gql`
+  query friend($friend: String!) {
+    friend(friend_id: $friend) {
+      iowho {
+        amount
+        to {
+          name
+        }
       }
     }
   }
@@ -115,6 +128,20 @@ export const ADD_BASE_CHORE = gql`
       id
       name
       points
+    }
+  }
+`;
+
+export const ADD_IOU = gql`
+  mutation addIou($toId: String!, $fromId: String!, $amount: Float!) {
+    addIou(to_id: $toId, from_id: $fromId, amount: $amount) {
+      amount
+      to {
+        name
+      }
+      from {
+        name
+      }
     }
   }
 `;

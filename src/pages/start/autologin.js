@@ -3,7 +3,6 @@ import { baseURL, client } from '../../config';
 import { GET_FRIEND } from '../../queries';
 
 
-
 export const AutoLogin = () => {
   let friend;
   return new Promise((resolve, reject) => {
@@ -11,7 +10,8 @@ export const AutoLogin = () => {
       .then(([user, pass]) => {
         friend = user;
         if (user !== null && pass !== null) {
-          return fetch(`${baseURL}/login?friend_id=${user}&password=${pass}`);
+          console.log(user, pass);
+          return fetch(`${baseURL}/login?whoami=${user}&pass=${pass}`);
         }
         throw new Error('No data saved');
       })
