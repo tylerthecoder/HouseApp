@@ -28,6 +28,7 @@
     "apollo-cache-inmemory": "^1.2.5",
     "apollo-client": "^2.3.5",
     "apollo-link-http": "^1.5.4",
+    "babel-eslint": "^8.2.6",
     "eslint-plugin-react-native": "^3.2.1",
     "expo": "^27.0.1",
     "graphql": "^0.13.2",

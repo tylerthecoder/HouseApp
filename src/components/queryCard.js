@@ -9,7 +9,7 @@ export class QueryCard extends React.Component {
       queryVars,
       titleFunc,
       bodyFunc,
-      onclick,
+      onPress,
     } = this.props;
 
     return (
@@ -23,7 +23,7 @@ export class QueryCard extends React.Component {
             <Card
               titleText={titleText}
               bodyText={bodyText}
-              onclick={onclick}
+              onPress={onPress}
             />
           );
         }}

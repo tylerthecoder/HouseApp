@@ -17,7 +17,7 @@ export class NumberInput extends React.Component {
   constructor() {
     super();
     this.state = {
-      number: 0,
+      number: '',
     };
   }
 
@@ -33,11 +33,12 @@ export class NumberInput extends React.Component {
           onChangeText={(rawAmount) => {
             const num = rawAmount.length === 0 ? 0 : parseFloat(rawAmount, 10);
             this.setState({
-              number: num,
+              number: num !== 0 ? num : '',
             });
             onChange(num);
           }}
           placeholder={placeholder}
+          keyboardType='numeric'
         />
       </View>
     );

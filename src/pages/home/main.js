@@ -33,7 +33,7 @@ export class HomeScreen extends React.Component {
             const { points } = data.friend;
             return `You have ${points} point${points !== 1 ? 's' : ''}`;
           }}
-          onclick={() => {
+          onPress={() => {
             navigation.navigate('Chores', { friend });
           }}
         />
@@ -43,9 +43,10 @@ export class HomeScreen extends React.Component {
           titleFunc={() => 'IOUs'}
           bodyFunc={(data) => {
             const totOwe = data.friend.iowho.reduce((count, iou) => count + iou.amount, 0);
-            return totOwe > 0 ? `You owe $${totOwe}` : `You are owned ${totOwe * -1}`;
+            const roundedAmount = Math.floor(totOwe * 100) / 100;
+            return totOwe > 0 ? `You owe $${roundedAmount}` : `You are owed ${roundedAmount * -1}`;
           }}
-          onclick={() => {
+          onPress={() => {
             navigation.navigate('Ious', { friend });
           }}
         />

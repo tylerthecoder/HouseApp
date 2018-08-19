@@ -3,39 +3,38 @@ import {
   Text,
   View,
   Picker,
-  StyleSheet,
+  TextInput,
 } from 'react-native';
 import { Mutation } from 'react-apollo';
 import { ADD_IOU, GET_MY_IOUS } from '../../queries';
-import { FriendPicker } from '../../components/friendPicker';
-import { NumberInput } from '../../components/numberInput';
-import { BlockButton } from '../../components/blockButton';
-
-const styles = StyleSheet.create({
-  headerText: {
-    textAlign: 'center',
-    fontSize: 20,
-  },
-  centerText: {
-    textAlign: 'center',
-  },
-});
+import { FriendPicker, NumberInput, BlockButton } from '../../components';
+import styles from '../../styles';
 
 
 export class PayScreen extends React.Component {
+  static navigationOptions = {
+    titile: 'Pay',
+  }
+
   constructor() {
     super();
     this.state = {
       payWho: undefined,
       direction: 'in',
       amount: 0,
+      reason: '',
     };
   }
 
   onSubmit(addIou) {
     const { navigation } = this.props;
     const friend = navigation.getParam('friend');
-    const { payWho, direction, amount } = this.state;
+    const {
+      payWho,
+      direction,
+      amount,
+      reason,
+    } = this.state;
 
     const toId = direction === 'in' ? friend.friend_id : payWho;
     const fromId = direction === 'out' ? friend.friend_id : payWho;
@@ -45,6 +44,7 @@ export class PayScreen extends React.Component {
         amount,
         toId,
         fromId,
+        reason,
       },
       refetchQueries: [
         {
@@ -52,19 +52,14 @@ export class PayScreen extends React.Component {
           variables: {
             friend: toId,
           },
-        }, {
-          query: GET_MY_IOUS,
-          variables: {
-            friend: fromId,
-          },
         },
       ],
     })
-      .catch(err => console.log(err));
+      .catch(err => console.error(err));
   }
 
   render() {
-    const { direction } = this.state;
+    const { direction, reason } = this.state;
     const { navigation } = this.props;
     const friend = navigation.getParam('friend');
     return (
@@ -72,22 +67,20 @@ export class PayScreen extends React.Component {
         <Text style={styles.headerText}> Enter Transaction </Text>
         <FriendPicker
           exclude={[friend.friend_id]}
-          onChange={(fri) => {
-            this.setState(prev => ({
-              payWho: fri,
-              direction: prev.direction,
-              amount: prev.amount,
-            }));
+          onChange={(payWho) => {
+            this.setState((prev) => {
+              prev.payWho = payWho;
+              return prev;
+            });
           }}
         />
         <Picker
           selectedValue={direction}
           onValueChange={(dir) => {
-            this.setState(prev => ({
-              payWho: prev.payWho,
-              direction: dir,
-              amount: prev.amount,
-            }));
+            this.setState((prev) => {
+              prev.direction = dir;
+              return prev;
+            });
           }}
         >
           <Picker.Item
@@ -103,23 +96,34 @@ export class PayScreen extends React.Component {
         </Picker>
         <NumberInput
           placeholder='How much?'
-          onChange={(amt) => {
-            this.setState(prev => ({
-              amount: amt,
-              payWho: prev.payWho,
-              direction: prev.direction,
-            }));
+          onChange={(amount) => {
+            this.setState((prev) => {
+              prev.amount = amount;
+              return prev;
+            });
           }}
         />
+        <Text style={styles.bodyText}> For what? </Text>
+        <TextInput
+          value={reason}
+          style={styles.bodyText}
+          placeholder='Enter reason for transaction'
+          onChangeText={(text) => {
+            this.setState((prev) => {
+              prev.reason = text;
+              return prev;
+            });
+          }}
+        />
+
         <Mutation mutation={ADD_IOU}>
           {addIou => (
             <BlockButton
               onPress={() => {
                 this.onSubmit(addIou);
               }}
-            >
-              <Text style={styles.centerText}> Submit Transaction </Text>
-            </BlockButton>
+              text='Submit Transaction'
+            />
           )}
         </Mutation>
       </View>

@@ -133,9 +133,10 @@ export const ADD_BASE_CHORE = gql`
 `;
 
 export const ADD_IOU = gql`
-  mutation addIou($toId: String!, $fromId: String!, $amount: Float!) {
-    addIou(to_id: $toId, from_id: $fromId, amount: $amount) {
+  mutation addIou($toId: String!, $fromId: String!, $amount: Float!, $reason: String!) {
+    addIou(to_id: $toId, from_id: $fromId, amount: $amount, reason: $reason) {
       amount
+      reason
       to {
         name
       }
@@ -143,5 +144,11 @@ export const ADD_IOU = gql`
         name
       }
     }
+  }
+`;
+
+export const SPLIT_COST = gql`
+  mutation splitCost($payerId: String!, $amount: Float!, $nonPayers:[String]!, $reason: String!) {
+    splitCost(payerId: $payerId, amount: $amount, nonPayers: $nonPayers, reason: $reason)
   }
 `;

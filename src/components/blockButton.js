@@ -1,38 +1,35 @@
 import React from 'react';
 import {
-  View,
+  Text,
   StyleSheet,
-  TouchableHighlight,
 } from 'react-native';
+import { Card } from './card';
 
 const styles = StyleSheet.create({
   button: {
     backgroundColor: 'green',
-    borderColor: 'black',
-    borderWidth: 1,
-    borderRadius: 3,
-    padding: 5,
-    marginTop: 5,
+    borderRadius: 30,
   },
-  container: {
+  btnText: {
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 20,
   },
 });
 
 
 export class BlockButton extends React.Component {
   render() {
-    const { children, onPress } = this.props;
+    const { onPress, text } = this.props;
     return (
-      <TouchableHighlight
+      <Card
         style={styles.button}
         onPress={() => {
           onPress();
         }}
       >
-        <View style={styles.container}>
-          {children}
-        </View>
-      </TouchableHighlight>
+        <Text style={styles.btnText}> { text } </Text>
+      </Card>
     );
   }
 }

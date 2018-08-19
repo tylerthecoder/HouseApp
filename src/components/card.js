@@ -6,7 +6,7 @@ import {
   TouchableHighlight,
 } from 'react-native';
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
   card: {
     backgroundColor: 'white',
     borderWidth: 1,
@@ -33,25 +33,28 @@ const style = StyleSheet.create({
 });
 
 export class Card extends React.Component {
-  onclick() {
-    const { onclick } = this.props;
+  press() {
+    const { onPress } = this.props;
     // navigate to the chores page
-    if (onclick) {
-      onclick();
+    if (onPress) {
+      onPress();
     }
   }
 
   render() {
     const {
       titleText,
+      children,
       bodyText,
+      style,
     } = this.props;
 
     return (
-      <TouchableHighlight onPress={() => this.onclick()} style={style.card}>
+      <TouchableHighlight onPress={() => this.press()} style={[styles.card, style]}>
         <View>
-          {titleText && <Text style={style.cardTitle}> {titleText} </Text>}
-          <Text style={style.cardText}> {bodyText} </Text>
+          {titleText && <Text style={styles.cardTitle}> {titleText} </Text>}
+          {bodyText && <Text style={styles.cardText}> {bodyText} </Text>}
+          {children}
         </View>
       </TouchableHighlight>
     );
