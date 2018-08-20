@@ -10,6 +10,7 @@ import { AddChoreScreen } from './src/pages/add/chore/main';
 import { IouScreen } from './src/pages/ious/main';
 import { PayScreen } from './src/pages/ious/pay';
 import { SplitCostScreen } from './src/pages/ious/split';
+import { AllTransaction } from './src/pages/ious/allTrans';
 
 const RootStack = createStackNavigator({
   Start: StartScreen,
@@ -19,6 +20,7 @@ const RootStack = createStackNavigator({
   Ious: IouScreen,
   Pay: PayScreen,
   Split: SplitCostScreen,
+  AllTrans: AllTransaction,
 }, {
   initialRouteName: 'Start',
 });

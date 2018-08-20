@@ -22,20 +22,26 @@ export class IouScreen extends React.Component {
             if (loading) return <Card bodyText='Loading' />;
             if (error) return <Card bodyText={JSON.stringify(error)} />;
             const { iowho } = data.friend;
-            return iowho.map((iou) => {
-              const { amount, to: { name } } = iou;
-              const roundedAmount = Math.floor(amount * 100) / 100;
-              const id = Math.random();
-              const payText = amount > 0 ? `You owe ${name} $${roundedAmount}` : `${name} owes you $${roundedAmount * -1}`;
-              return (
-                <Card
-                  key={id}
-                  bodyText={payText}
-                />
-              );
-            });
+            const bodyText = iowho.reduce((text, iou) => {
+              const { amount, from: { name } } = iou;
+              const roundedAmount = Math.abs(Math.floor(amount * 100) / 100);
+              const payText = amount < 0 ? `You owe ${name} $${roundedAmount}` : `${name} owes you $${roundedAmount}`;
+              return `${text}\n${payText}\n`;
+            }, '');
+            return (
+              <Card
+                titleText='Your IOUs'
+                bodyText={bodyText}
+              />
+            );
           }}
         </Query>
+        <BlockButton
+          onPress={() => {
+            navigation.navigate('AllTrans', { friend });
+          }}
+          text='See all your transaction'
+        />
         <BlockButton
           onPress={() => {
             navigation.navigate('Pay', { friend });

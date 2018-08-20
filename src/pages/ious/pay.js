@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Text,
   View,
-  Picker,
   TextInput,
 } from 'react-native';
 import { Mutation } from 'react-apollo';
@@ -13,14 +12,13 @@ import styles from '../../styles';
 
 export class PayScreen extends React.Component {
   static navigationOptions = {
-    titile: 'Pay',
+    title: 'Request Money',
   }
 
   constructor() {
     super();
     this.state = {
       payWho: undefined,
-      direction: 'in',
       amount: 0,
       reason: '',
     };
@@ -31,13 +29,12 @@ export class PayScreen extends React.Component {
     const friend = navigation.getParam('friend');
     const {
       payWho,
-      direction,
       amount,
       reason,
     } = this.state;
 
-    const toId = direction === 'in' ? friend.friend_id : payWho;
-    const fromId = direction === 'out' ? friend.friend_id : payWho;
+    const toId = payWho;
+    const fromId = friend.friend_id;
 
     addIou({
       variables: {
@@ -50,7 +47,7 @@ export class PayScreen extends React.Component {
         {
           query: GET_MY_IOUS,
           variables: {
-            friend: toId,
+            friend: friend.friend_id,
           },
         },
       ],
@@ -59,12 +56,12 @@ export class PayScreen extends React.Component {
   }
 
   render() {
-    const { direction, reason } = this.state;
+    const { reason } = this.state;
     const { navigation } = this.props;
     const friend = navigation.getParam('friend');
     return (
       <View>
-        <Text style={styles.headerText}> Enter Transaction </Text>
+        <Text style={styles.bodyText}> Request from </Text>
         <FriendPicker
           exclude={[friend.friend_id]}
           onChange={(payWho) => {
@@ -74,26 +71,6 @@ export class PayScreen extends React.Component {
             });
           }}
         />
-        <Picker
-          selectedValue={direction}
-          onValueChange={(dir) => {
-            this.setState((prev) => {
-              prev.direction = dir;
-              return prev;
-            });
-          }}
-        >
-          <Picker.Item
-            key={0}
-            label='Paid you'
-            value='out'
-          />
-          <Picker.Item
-            key={0}
-            label='Needs to pay you'
-            value='in'
-          />
-        </Picker>
         <NumberInput
           placeholder='How much?'
           onChange={(amount) => {
@@ -103,11 +80,10 @@ export class PayScreen extends React.Component {
             });
           }}
         />
-        <Text style={styles.bodyText}> For what? </Text>
         <TextInput
           value={reason}
           style={styles.bodyText}
-          placeholder='Enter reason for transaction'
+          placeholder='For what?'
           onChangeText={(text) => {
             this.setState((prev) => {
               prev.reason = text;
@@ -115,7 +91,6 @@ export class PayScreen extends React.Component {
             });
           }}
         />
-
         <Mutation mutation={ADD_IOU}>
           {addIou => (
             <BlockButton

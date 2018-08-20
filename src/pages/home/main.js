@@ -43,8 +43,8 @@ export class HomeScreen extends React.Component {
           titleFunc={() => 'IOUs'}
           bodyFunc={(data) => {
             const totOwe = data.friend.iowho.reduce((count, iou) => count + iou.amount, 0);
-            const roundedAmount = Math.floor(totOwe * 100) / 100;
-            return totOwe > 0 ? `You owe $${roundedAmount}` : `You are owed ${roundedAmount * -1}`;
+            const roundedAmount = Math.abs(Math.floor(totOwe * 100) / 100);
+            return totOwe < 0 ? `You owe $${roundedAmount}` : `You are owed ${roundedAmount}`;
           }}
           onPress={() => {
             navigation.navigate('Ious', { friend });

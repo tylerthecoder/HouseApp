@@ -79,8 +79,20 @@ export const GET_MY_IOUS = gql`
     friend(friend_id: $friend) {
       iowho {
         amount
+        from {
+          name
+        }
+      }
+      allIous {
+        amount
+        reason
         to {
           name
+          friend_id
+        }
+        from {
+          name
+          friend_id
         }
       }
     }
