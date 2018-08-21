@@ -47,16 +47,30 @@ export class Card extends React.Component {
       children,
       bodyText,
       style,
+      onPress,
     } = this.props;
 
+    const body = (
+      <View>
+        {titleText && <Text style={styles.cardTitle}> {titleText} </Text>}
+        {bodyText && <Text style={styles.cardText}> {bodyText} </Text>}
+        {children}
+      </View>
+    )
+
+
+    if (onPress) {
+      return (
+        <TouchableHighlight onPress={() => this.press()} style={[styles.card, style]}>
+          {body}
+        </TouchableHighlight>
+      );
+    }
+
     return (
-      <TouchableHighlight onPress={() => this.press()} style={[styles.card, style]}>
-        <View>
-          {titleText && <Text style={styles.cardTitle}> {titleText} </Text>}
-          {bodyText && <Text style={styles.cardText}> {bodyText} </Text>}
-          {children}
-        </View>
-      </TouchableHighlight>
+      <View style={[styles.card, style]}>
+        {body}
+      </View>
     );
   }
 }
