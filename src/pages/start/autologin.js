@@ -20,7 +20,7 @@ export const AutoLogin = () => {
         if (x === 'Success') {
           return client.query({
             query: GET_FRIEND,
-            variables: { friend_id: friend }
+            variables: { friend_id: friend },
           });
         }
         throw new Error('Inncorrect Password');

@@ -14,7 +14,8 @@
   },
   "scripts": {
     "start": "react-native start",
-    "android": "react-native run-android",
+    "android": "NODE_ENV=production react-native run-andriod",
+    "android:dev": "NODE_ENV=development react-native run-android",
     "ios": "react-native run-ios",
     "test": "jest"
   },
