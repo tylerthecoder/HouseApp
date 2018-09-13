@@ -1,6 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 import { ApolloProvider } from 'react-apollo';
+import { YellowBox } from 'react-native';
 import { client } from './src/config';
 
 import { StartScreen } from './src/pages/start/main';
@@ -11,6 +12,10 @@ import { IouScreen } from './src/pages/ious/main';
 import { PayScreen } from './src/pages/ious/pay';
 import { SplitCostScreen } from './src/pages/ious/split';
 import { AllTransaction } from './src/pages/ious/allTrans';
+import { ShoppingListScreen } from './src/pages/items/shoppinglist';
+import { AddToShoppingListScreen } from './src/pages/items/addToShoppingList';
+
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 const RootStack = createStackNavigator({
   Start: StartScreen,
@@ -21,6 +26,8 @@ const RootStack = createStackNavigator({
   Pay: PayScreen,
   Split: SplitCostScreen,
   AllTrans: AllTransaction,
+  ShoppingList: ShoppingListScreen,
+  AddItemToShoppingList: AddToShoppingListScreen,
 }, {
   initialRouteName: 'Start',
 });

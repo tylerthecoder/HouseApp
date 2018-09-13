@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import ActionButton from 'react-native-action-button';
 import { QueryCard } from '../../components/queryCard';
-import { GET_MY_IOUS, GET_FRIEND_CHORES } from '../../queries';
+import { GET_MY_IOUS, GET_FRIEND_CHORES, GET_SHOPPING_LIST } from '../../queries';
 
 const style = StyleSheet.create({
   container: {
@@ -50,7 +50,18 @@ export class HomeScreen extends React.Component {
             navigation.navigate('Ious', { friend });
           }}
         />
-
+        <QueryCard
+          query={GET_SHOPPING_LIST}
+          queryVars={{}}
+          titleFunc={() => 'Shopping List'}
+          bodyFunc={(data) => {
+            const listLength = data.shoppingList.length;
+            return `${listLength} item${listLength === 1 ? "":"s"} on your shopping list`;
+          }}
+          onPress={() => {
+            navigation.navigate('ShoppingList', { friend });
+          }}
+        />
         <ActionButton buttonColor='rgba(231,76,60,1)'>
           <ActionButton.Item buttonColor='#9b59b6' title='New Chore' onPress={() => navigation.navigate('AddChore', { friend })}>
             <Text> Chore </Text>

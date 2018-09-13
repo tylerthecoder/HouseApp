@@ -99,9 +99,27 @@ export const GET_MY_IOUS = gql`
   }
 `;
 
+export const GET_SHOPPING_LIST = gql`
+  {
+    shoppingList {
+      id
+      name
+      notes
+    }
+  }
+`;
+
+export const GET_SUGESTED_ITEMS = gql`
+  query suggestedItem($str: String) {
+    suggestedItem(str: $str) {
+      name
+    }
+  }
+`;
+
 export const COMPLETE_CHORE = gql`
   mutation changeStatus($id: String!) {
-    changeStatus(id: $id, status: "completed") {
+    changeStatus(id: $id, vimstatus: "completed") {
       id
     }
   }
@@ -162,5 +180,20 @@ export const ADD_IOU = gql`
 export const SPLIT_COST = gql`
   mutation splitCost($payerId: String!, $amount: Float!, $nonPayers:[String]!, $reason: String!) {
     splitCost(payerId: $payerId, amount: $amount, nonPayers: $nonPayers, reason: $reason)
+  }
+`;
+
+export const ADD_SHOPPING_LIST_ITEM = gql`
+  mutation addItemToList($itemName: String, $notes: String){
+    addItemToList(itemName: $itemName, notes: $notes){
+      name
+      notes
+    }
+  }
+`;
+
+export const REMOVE_SHOPPING_LIST_ITEM = gql`
+  mutation removeListItem($listItemId: String!) {
+    removeListItem(listItemId: $listItemId)
   }
 `;
