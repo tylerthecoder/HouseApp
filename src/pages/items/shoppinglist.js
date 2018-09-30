@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Text,
   View,
+  ScrollView,
 } from 'react-native';
 import { Query } from 'react-apollo';
 import { Card, MutationButton, BlockButton } from '../../components';
@@ -12,12 +13,6 @@ export class ShoppingListScreen extends React.Component {
     const { navigation } = this.props;
     return (
       <View>
-        <BlockButton
-          text='Add to list'
-          onPress={() => {
-            navigation.navigate('AddItemToShoppingList');
-          }}
-        />
         <Query query={GET_SHOPPING_LIST}>
           {({
             loading,
@@ -27,9 +22,14 @@ export class ShoppingListScreen extends React.Component {
           }) => {
             if (loading) return <Text> Loading </Text>;
             if (error) return <Text> error </Text>;
-
             return (
-              <View>
+              <ScrollView>
+                <BlockButton
+                  text='Add to list'
+                  onPress={() => {
+                    navigation.navigate('AddItemToShoppingList');
+                  }}
+                />
                 <BlockButton
                   text='Refresh'
                   onPress={() => refetch()}
@@ -62,7 +62,7 @@ export class ShoppingListScreen extends React.Component {
                     </Card>
                   ))
                 }
-              </View>
+              </ScrollView>
             );
           }}
         </Query>

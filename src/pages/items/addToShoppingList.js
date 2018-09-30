@@ -9,6 +9,15 @@ import { Query } from 'react-apollo';
 import { GET_SUGESTED_ITEMS, ADD_SHOPPING_LIST_ITEM, GET_SHOPPING_LIST } from '../../queries';
 import { MutationButton } from '../../components';
 
+const resultStyle = {
+  width: '100%',
+  backgroundColor: 'white',
+  borderBottomColor: 'black',
+  borderBottomWidth: 2,
+  textAlign: 'center',
+  padding: 5,
+};
+
 export class AddToShoppingListScreen extends React.Component {
   constructor() {
     super();
@@ -43,7 +52,20 @@ export class AddToShoppingListScreen extends React.Component {
                 data={suggestedItem}
                 renderItem={({ item }) => {
                   const { id, name } = item;
-                  return <Text key={id}> {name} </Text>;
+                  return (
+                    <Text
+                      style={resultStyle}
+                      key={id}
+                      onPress={() => {
+                        this.setState((prev) => {
+                          prev.itemName = name;
+                          return prev;
+                        });
+                      }}
+                    >
+                      {name}
+                    </Text>
+                  );
                 }}
                 keyExtractor={(_item, index) => String(index)}
               />
