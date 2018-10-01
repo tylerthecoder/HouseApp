@@ -15,6 +15,8 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (networkError) console.log(`[Network error]: ${networkError}`);
 });
 // export const baseURL = 'http://lounge621app.qu2kndcevx.us-west-2.elasticbeanstalk.com';
+console.log('ENVIDSK');
+console.log(process.env.NODE_ENV);
 export const baseURL = process.env.NODE_ENV === 'development'
   ? 'http://localhost:1337'
   : 'http://72.204.8.169:1337';
