@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
       width: 5,
       height: 5,
     },
+    elevation: 8,
   },
   cardTitle: {
     textAlign: 'center',
@@ -56,7 +57,7 @@ export class Card extends React.Component {
         {bodyText && <Text style={styles.cardText}> {bodyText} </Text>}
         {children}
       </View>
-    )
+    );
 
 
     if (onPress) {

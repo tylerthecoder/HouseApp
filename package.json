@@ -3,18 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "babel-eslint": "^8.2.6",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^17.0.0",
     "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.10.0",
+    "eslint-plugin-react-native": "^3.2.1",
     "jest": "^23.5.0",
     "jest-react-native": "^18.0.0",
     "react-test-renderer": "16.3.1"
   },
   "scripts": {
     "start": "react-native start",
-    "android": "NODE_ENV=production react-native run-andriod",
+    "android": "react-native run-android",
     "android:dev": "NODE_ENV=development react-native run-android",
     "ios": "react-native run-ios",
     "test": "jest"
@@ -26,9 +28,9 @@
     "apollo-boost": "^0.1.10",
     "apollo-cache-inmemory": "^1.2.5",
     "apollo-client": "^2.3.5",
+    "apollo-link": "^1.2.2",
+    "apollo-link-error": "^1.1.0",
     "apollo-link-http": "^1.5.4",
-    "babel-eslint": "^8.2.6",
-    "eslint-plugin-react-native": "^3.2.1",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
     "react": "16.3.1",
